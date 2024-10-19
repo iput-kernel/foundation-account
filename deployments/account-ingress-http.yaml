@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-bank-ingress-http
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  rules:
+  - host: api.iput-kernel.com
+    http:
+      paths:
+      - path: /v1/account
+        pathType: Prefix
+        backend:
+          service:
+            name: account-service
+            port:
+              number: 80
+      - path: /v1/social
+        pathType: Prefix
+        backend:
+          service:
+            name: social-service
+            port:
+              number: 80
+      - path: /v1/facility
+        pathType: Prefix
+        backend:
+          service:
+            name: facility-service
+            port:
+              number: 80
+      - path: /v1/timeslot
+        pathType: Prefix
+        backend:
+          service:
+            name: timeslot-service
+            port:
+              number: 80
+      - path: /v1/project
+        pathType: Prefix
+        backend:
+          service:
+            name: project-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - api.iput-kernel.com
+    secretName: simple-bank-api-cert

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-app-config
+  namespace: iput-kernel-foundation
+data:
+  SMTP_HOST: "mail1028.onamae.ne.jp"
+  SMTP_PORT: "587"
+  SMTP_USERNAME: "moves-test@f-cirrus.co.jp"
+  REDIS_ADDRESS: "redis:6379"
+  REDIS_DB: "0"
+  DB_HOST: "db"
+  DB_USER: "go-app"
+  DB_NAME: "MOVES_CLONE_AUTH"
+  DB_PORT: "5432"
+  DB_SSLMODE: "require"
+  CONFIRMATION_TOKEN_EXPIRY_MINUITS: "60"

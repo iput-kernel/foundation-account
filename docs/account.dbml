@@ -1,0 +1,92 @@
+Project FOUNDATION_ACCOUNT {
+  database_type: 'PostgreSQL'
+  Note: '''
+    ## 概要
+    このプロジェクトは、学生が管理することを主体においた、大学生活をより豊かで効率的にするソーシャルプラットフォームである。
+
+    ## 要件一覧
+    １．すべてのユーザーは基本的に匿名及び実名を意図的に選択できる
+
+    ２．すべてのユーザーは学年、クラスや専攻など、自分自身の所属を証明する手段を持つ
+
+    ３．特定のドメインの人間しか登録することは不可能
+
+    ４．ユーザーはそれぞれ６段階の認証レベルが振り分けられており、デフォルトは、
+
+    * ゲスト：０ 
+
+    * 学校関連者：１ 
+
+    * 学生：２ 
+
+    とする。
+
+    ５．3~5以上になると、
+
+    * ３以上：クラスのメンバーや、時間割を編集する権限 
+
+    * ４以上：時間割に利用する科目を編集する権限 ３人まで他のユーザーを認証レベル３として保証することができる。
+
+    * ５以上：管理者と同等の権限を持つ 悪質なユーザーのBANや、匿名の剥奪をする権利 ３人まで他のユーザーを認証レベル４として保証することができる。
+
+        
+    というようにアクセスできる領域が増える。
+
+    ６．どの学生がどのクラスにいるなどの情報は、必ず１以上のユーザーしかアクセスできない。
+
+    ７．基本的なレイアウトはダッシュボード形式になっており、その内容は学生やそのコミュニティーが作成し、管理者が承諾したらマージする。
+
+    ８．初期で入っているのはデータベース管理のフォームと、時間割・イベント・自習 談話室を確認できるダッシュボードと、SNSには必ずあると言っていいPostやプロフィールなどの機能と、VOSの代替となり得る存在、落とし物用の掲示板である。
+
+      これらはslack等で事足りるものであるが、重要なのはこれらの情報がデータベースの情報をもとに、能動的に情報が整理され、かつ学生側がそれらに自由にアクセスできることにある。
+      
+  '''
+}
+
+Table follow {
+  following_user_id uuid
+  followed_user_id uuid
+  created_at timestamptz [default: `now()`]
+}
+
+Table user {
+  id uuid [pk , default: `uuid_generate_v4()`]
+  name varchar(20) [not null]
+  email varchar(100) [unique, not null]
+  password_hash varchar(60) [not null]
+  role varchar(12) [not null]
+  class_id uuid
+  is_verified bool [not null, default: false] 
+  updated_at timestamptz [default: `now()`]
+  created_at timestamptz [default: `now()`]
+}
+
+Table profile {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  user_id uuid [not null]
+  real_name varchar(30)
+  birthday date
+  sex varchar(6)
+  phone varchar(14)
+  describe varchar(200)
+  created_at timestamptz [default: `now()`]
+}
+
+
+Table verify_email {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  user_id uuid [not null]
+  email varchar(100) [not null]
+  secfret_code varchar [not null]
+  is_used bool [not null, default: false ]
+  created_at timestamptz [not null, default: `now()`]
+  expired_at timestamptz [not null, default: `now() + interval '15 minutes'`]
+}
+
+Ref: user.id < follow.following_user_id
+
+Ref: user.id < follow.followed_user_id
+
+Ref: "user"."id" - "profile"."user_id"
+
+Ref: "user"."id" - "verify_email"."user_id"
