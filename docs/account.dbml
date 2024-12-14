@@ -1,0 +1,82 @@
+Project FOUNDATION_ACCOUNT {
+  database_type: 'PostgreSQL'
+  Note: '''
+    ## 概要
+    このプロジェクトは、学生が管理することを主体においた、大学生活をより豊かで効率的にするソーシャルプラットフォームである。
+  '''
+}
+
+Table follows {
+  following_user_id uuid [ref: > users.id, not null]
+  followed_user_id uuid [ref: >users.id, not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table users {
+  id uuid [pk]
+  name varchar [not null, unique]
+  email varchar [not null, unique]
+  password_hash varchar [not null]
+  role role [not null]
+  credit bigint [not null]
+  level int [not null]
+  updated_at timestamptz [not null, default: `now()`]
+  created_at timestamptz [not null, default: `now()`]
+
+  Indexes {
+    role
+  }
+}
+
+Table statements {
+  id uuid [pk]
+  user_id uuid [ref: > users.id, not null]
+  amount bigint [not null, note: '値の正負両方を許容する']
+  reason varchar [not null, note: '必ず増減理由を明記する必要がある']
+  created_at timestamptz [not null, default: `now()`]
+  
+  Indexes {
+    user_id
+  }
+}
+
+Table transfers {
+  id uuid [pk]
+  from_user_id uuid [ref: > users.id, not null]
+  to_user_id uuid [ref: > users.id, not null]
+  amount bigint [not null, note: '値は正でなければならない']
+  created_at timestamptz [not null, default: `now()`]
+  
+  Indexes {
+    from_user_id
+    to_user_id
+    (from_user_id, to_user_id)
+  }
+}
+
+enum role {
+  student
+  teacher
+  left
+}
+
+Table verify_emails {
+  id uuid [pk]
+  name varchar [not null]
+  email varchar [not null]
+  password_hash varchar [not null]
+  secret_code varchar [not null]
+  created_at timestamptz [not null, default: `now()`]
+  expired_at timestamptz [not null, default: `now() + interval '15 minutes'`]
+}
+
+Table sessions {
+  id uuid [pk]
+  user_id uuid [ref: > users.id, not null]
+  refresh_token varchar [not null]
+  user_agent varchar [not null]
+  client_ip varchar [not null]
+  is_blocked boolean [not null, default: false]
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `now()`]
+}

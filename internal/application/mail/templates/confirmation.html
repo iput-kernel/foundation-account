@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>[IPUT-Kernel]登録確認リンク</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .header, .footer {
+            background-color: #f8f8f8;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        .footer {
+            border-top: 1px solid #ddd;
+            border-bottom: none;
+        }
+        .company-info {
+            margin-top: 20px;
+        }
+        .company-info ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .company-info li {
+            margin: 5px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .button-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{.Username}}さん</h1>
+        </div>
+        <h2>IPUT-Kernelへの登録ありがとうございます。</h2>
+        <p>以下のリンクをクリックして認証を完了してください:</p>
+        <div class="button-container">
+            <a href="{{.Link}}" class="button">認証リンク</a>
+        </div>
+        <div class="company-info">
+            <h3>学校情報:</h3>
+            <ul>
+                <li>学校名: {{.AcademyName}}</li>
+            </ul>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 IPUT-Kernel. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

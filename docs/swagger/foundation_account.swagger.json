@@ -1,0 +1,319 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "account_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "AccountService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/account/v1/RenewAccessToken": {
+      "post": {
+        "operationId": "AccountService_RenewAccessToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbRenewAccessTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbRenewAccessTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
+    "/account/v1/login": {
+      "post": {
+        "operationId": "AccountService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
+    "/account/v1/publickey": {
+      "get": {
+        "operationId": "AccountService_GetPublicKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbGetPublicKeyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
+    "/account/v1/register": {
+      "post": {
+        "operationId": "AccountService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
+    "/account/v1/verify_email": {
+      "post": {
+        "operationId": "AccountService_VerifyEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbVerifyEmailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbVerifyEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "pbCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "pbCreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbGetPublicKeyResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "pbLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "pbLoginResponse": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "accessTokenExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "refleshToken": {
+          "type": "string"
+        },
+        "refleshTokenExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbRenewAccessTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refleshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "pbRenewAccessTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "accessTokenExpiresAt": {
+          "type": "string"
+        }
+      }
+    },
+    "pbUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbVerifyEmailRequest": {
+      "type": "object",
+      "properties": {
+        "verifyEmailId": {
+          "type": "string"
+        },
+        "secretCode": {
+          "type": "string"
+        }
+      }
+    },
+    "pbVerifyEmailResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

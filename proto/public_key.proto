@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message Empty {
+}
+
+message GetPublicKeyResponse {
+  string public_key = 1;
+}
+
