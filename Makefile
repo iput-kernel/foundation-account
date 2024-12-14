@@ -1,28 +1,25 @@
-DB_URL=postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable
+DB_URL=postgresql://root:secret@localhost:5432/account?sslmode=disable
 
 network:
-	docker network create bank-network
+	docker network create foundation
 
 postgres:
-	docker run --name postgres --network bank-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
-
-mysql:
-	docker run --name mysql8 -p 3306:3306  -e MYSQL_ROOT_PASSWORD=secret -d mysql:8
+	docker run --name account-postgres --network foundation -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
 
 createdb:
-	docker exec -it postgres createdb --username=root --owner=root simple_bank
+	docker exec -it account-postgres createdb --username=root --owner=root account
 
 dropdb:
-	docker exec -it postgres dropdb simple_bank
+	docker exec -it account-postgres dropdb account --username=root 
 
 migrateup:
-	migrate -path db/migration -database "$(DB_URL)" -verbose up
+	migrate -path internal/infra/db/migration -database "$(DB_URL)" -verbose up
 
-migrateup1:
-	migrate -path db/migration -database "$(DB_URL)" -verbose up 1
+migrate%:
+	migrate -path internal/infra/db/migration -database "$(DB_URL)" -verbose up $*
 
 migratedown:
-	migrate -path db/migration -database "$(DB_URL)" -verbose down
+	migrate -path internal/infra/db/migration -database "$(DB_URL)" -verbose down
 
 migratedown1:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
@@ -31,10 +28,10 @@ new_migration:
 	migrate create -ext sql -dir db/migration -seq $(name)
 
 db_docs:
-	dbdocs build doc/db.dbml
+	dbdocs build docs/account.dbml
 
 db_schema:
-	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
+	dbml2sql --postgres -o docs/schema.sql docs/account.dbml
 
 sqlc:
 	sqlc generate
@@ -44,10 +41,6 @@ test:
 
 server:
 	go run main.go
-
-mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/techschool/simplebank/db/sqlc Store
-	mockgen -package mockwk -destination worker/mock/distributor.go github.com/techschool/simplebank/worker TaskDistributor
 
 proto:
 	rm -f internal/pb/*.go

@@ -4,14 +4,16 @@ metadata:
   name: go-app-config
   namespace: iput-kernel-foundation
 data:
-  SMTP_HOST: "mail1028.onamae.ne.jp"
-  SMTP_PORT: "587"
-  SMTP_USERNAME: "moves-test@f-cirrus.co.jp"
-  REDIS_ADDRESS: "redis:6379"
+  SMTP_HOST: "mail"
+  SMTP_PORT: "465"
+  SMTP_USERNAME: "noreply@iput-kernel.com"
+
+  REDIS_HOST: "account-worker"
+  REDIS_PORT: "6379"
   REDIS_DB: "0"
-  DB_HOST: "db"
-  DB_USER: "go-app"
-  DB_NAME: "MOVES_CLONE_AUTH"
+
+  DB_HOST: "account-db"
+  DB_USER: "root"
+  DB_NAME: "account"
   DB_PORT: "5432"
   DB_SSLMODE: "require"
-  CONFIRMATION_TOKEN_EXPIRY_MINUITS: "60"

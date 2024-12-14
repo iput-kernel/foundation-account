@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message User {
+  string email = 1;
+  string username = 2;
+  google.protobuf.Timestamp created_at = 3;
+}

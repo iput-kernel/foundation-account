@@ -1,0 +1,37 @@
+ENV: "DEV"
+DOMAIN: "api.iput-kernel.com"
+HOSTNAME: "localhost"
+GW_PORT: "80"
+GRPC_PORT: "50051"
+
+DB:
+  HOST: "localhost"
+  USER: "root"
+  PASSWORD: "secret"
+  NAME: "account"
+  PORT: "5432"
+  SSLMODE: disable
+
+REDIS:
+  HOST: "localhost"
+  PORT: "6379"
+  PASSWORD: "secret"
+  DB: 0
+
+EMAIL:
+  NAME: "IPUT-Kernel"
+  ADDRESS: "noreply@iput-kernel.com"
+  PASSWORD: "secret"
+
+TOKEN:
+  ACCESS_DURATION: "15m"
+  REFRESH_DURATION: "2400h"
+
+CRED:
+  DEFAULT: 10
+
+  LEVEL1: 0
+  LEVEL2: 256
+  LEVEL3: 512
+  LEVEL4: 1024
+  LEVEL5: 2048
