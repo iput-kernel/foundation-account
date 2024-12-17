@@ -1,0 +1,19 @@
+version: v1
+plugins:
+  - name: go
+    out: internal/pb
+    opt:
+      - paths=source_relative
+  - name: go-grpc
+    out: internal/pb
+    opt:
+      - paths=source_relative
+  - name: grpc-gateway
+    out: internal/pb
+    opt:
+      - paths=source_relative
+  - name: openapiv2
+    out: docs/swagger
+    opt:
+      - allow_merge=true
+      - merge_file_name=foundation_account

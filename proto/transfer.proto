@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message TransferRequest {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  string amount = 3;
+}
+
+message TransferResponse {
+  string statement_id = 1;
+}

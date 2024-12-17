@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message FollowRequest {
+  string user_id = 1;
+}
+
+message FollowResponse {
+  string follow_id = 1;
+}

@@ -13,9 +13,11 @@ import (
 type Querier interface {
 	CreateEntry(ctx context.Context, arg CreateEntryParams) (Statement, error)
 	CreateFollow(ctx context.Context, arg CreateFollowParams) (Follow, error)
+	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVerifyEmail(ctx context.Context, arg CreateVerifyEmailParams) (VerifyEmail, error)
+	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetStatements(ctx context.Context, id uuid.UUID) (Statement, error)
 	GetTransfer(ctx context.Context, id uuid.UUID) (Transfer, error)
 	GetUser(ctx context.Context, id uuid.UUID) (User, error)

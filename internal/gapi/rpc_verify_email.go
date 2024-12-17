@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/iput-kernel/foundation-account/internal/domain"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
 	"github.com/iput-kernel/foundation-account/internal/pb"
 	"github.com/iput-kernel/foundation-account/internal/validation"
@@ -31,11 +32,16 @@ func (server *Server) VerifyEmail(ctx context.Context, req *pb.VerifyEmailReques
 		return nil, status.Errorf(codes.InvalidArgument, "無効な認証コードです")
 	}
 
+	role := domain.DetectRole(verifyResult.Email)
+
 	arg := db.CreateUserParams{
 		ID:           verifyEmailId,
 		Name:         verifyResult.Name,
 		Email:        verifyResult.Email,
 		PasswordHash: verifyResult.PasswordHash,
+		Role:         *role,
+		Credit:       int64(server.config.Cred.DefaultCredit),
+		Level:        1,
 	}
 
 	createUserResult, err := server.store.CreateUser(ctx, arg)
