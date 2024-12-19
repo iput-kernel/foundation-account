@@ -43,7 +43,6 @@ server:
 	go run main.go
 
 proto:
-	rm -f internal/pb/*.go
 	rm -f docs/swagger/*.swagger.json
 	buf generate
 	statik -src=./docs/swagger -dest=./docs

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package account.auth.v1;
+
+import "account/model/v1/user.proto";
+
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message VerifyEmailRequest {
+  string verify_email_id = 1;
+  string secret_code = 2;
+}
+
+message VerifyEmailResponse {
+  account.model.v1.User user = 1;
+}

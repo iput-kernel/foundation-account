@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package account.service.v1;
+
+import "account/auth/v1/create_user.proto";
+import "account/auth/v1/login.proto";
+import "account/auth/v1/public_key.proto";
+import "account/auth/v1/renew_access_token.proto";
+import "account/auth/v1/verify_email.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+service AccountService {
+  rpc GetPublicKey(account.auth.v1.GetPublicKeyRequest) returns (account.auth.v1.GetPublicKeyResponse) {
+    option (google.api.http) = {get: "/account/v1/publickey"};
+  }
+  rpc CreateUser(account.auth.v1.CreateUserRequest) returns (account.auth.v1.CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/account/v1/register"
+      body: "*"
+    };
+  }
+  rpc VerifyEmail(account.auth.v1.VerifyEmailRequest) returns (account.auth.v1.VerifyEmailResponse) {
+    option (google.api.http) = {
+      post: "/account/v1/verify_email"
+      body: "*"
+    };
+  }
+  rpc Login(account.auth.v1.LoginRequest) returns (account.auth.v1.LoginResponse) {
+    option (google.api.http) = {
+      post: "/account/v1/login"
+      body: "*"
+    };
+  }
+  rpc RenewAccessToken(account.auth.v1.RenewAccessTokenRequest) returns (account.auth.v1.RenewAccessTokenResponse) {
+    option (google.api.http) = {
+      post: "/account/v1/renew_access_token"
+      body: "*"
+    };
+  }
+}

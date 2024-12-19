@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package account.auth.v1;
+
+import "account/model/v1/user.proto";
+
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+
+message CreateUserRequest {
+  string email = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message CreateUserResponse {
+  account.model.v1.User user = 1;
+}

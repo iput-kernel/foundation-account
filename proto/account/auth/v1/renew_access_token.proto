@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package pb;
+package account.auth.v1;
+
 option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
 
 message RenewAccessTokenRequest {

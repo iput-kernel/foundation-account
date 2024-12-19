@@ -1,15 +1,18 @@
 syntax = "proto3";
 
-package pb;
+package account.user.v1;
 
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
 
-message User {
-  string email = 1;
-  string username = 2;
-  google.protobuf.Timestamp created_at = 3;
+message StatementRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message StatementResponse {
+  repeated Statement statements = 1;
 }
 
 message Statement {
@@ -17,10 +20,4 @@ message Statement {
   string amount = 3;
   string type = 4;
   google.protobuf.Timestamp created_at = 5;
-}
-
-message Follow {
-  string user_id = 2;
-  string follower_id = 3;
-  google.protobuf.Timestamp created_at = 4;
 }
