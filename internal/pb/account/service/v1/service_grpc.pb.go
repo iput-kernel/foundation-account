@@ -4,10 +4,11 @@
 // - protoc             (unknown)
 // source: account/service/v1/service.proto
 
-package pb
+package accountv1
 
 import (
 	context "context"
+	v1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -30,11 +31,11 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountServiceClient interface {
-	GetPublicKey(ctx context.Context, in *GetPublicKeyRequest, opts ...grpc.CallOption) (*GetPublicKeyResponse, error)
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	RenewAccessToken(ctx context.Context, in *RenewAccessTokenRequest, opts ...grpc.CallOption) (*RenewAccessTokenResponse, error)
+	GetPublicKey(ctx context.Context, in *v1.GetPublicKeyRequest, opts ...grpc.CallOption) (*v1.GetPublicKeyResponse, error)
+	CreateUser(ctx context.Context, in *v1.CreateUserRequest, opts ...grpc.CallOption) (*v1.CreateUserResponse, error)
+	VerifyEmail(ctx context.Context, in *v1.VerifyEmailRequest, opts ...grpc.CallOption) (*v1.VerifyEmailResponse, error)
+	Login(ctx context.Context, in *v1.LoginRequest, opts ...grpc.CallOption) (*v1.LoginResponse, error)
+	RenewAccessToken(ctx context.Context, in *v1.RenewAccessTokenRequest, opts ...grpc.CallOption) (*v1.RenewAccessTokenResponse, error)
 }
 
 type accountServiceClient struct {
@@ -45,9 +46,9 @@ func NewAccountServiceClient(cc grpc.ClientConnInterface) AccountServiceClient {
 	return &accountServiceClient{cc}
 }
 
-func (c *accountServiceClient) GetPublicKey(ctx context.Context, in *GetPublicKeyRequest, opts ...grpc.CallOption) (*GetPublicKeyResponse, error) {
+func (c *accountServiceClient) GetPublicKey(ctx context.Context, in *v1.GetPublicKeyRequest, opts ...grpc.CallOption) (*v1.GetPublicKeyResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPublicKeyResponse)
+	out := new(v1.GetPublicKeyResponse)
 	err := c.cc.Invoke(ctx, AccountService_GetPublicKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -55,9 +56,9 @@ func (c *accountServiceClient) GetPublicKey(ctx context.Context, in *GetPublicKe
 	return out, nil
 }
 
-func (c *accountServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+func (c *accountServiceClient) CreateUser(ctx context.Context, in *v1.CreateUserRequest, opts ...grpc.CallOption) (*v1.CreateUserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateUserResponse)
+	out := new(v1.CreateUserResponse)
 	err := c.cc.Invoke(ctx, AccountService_CreateUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -65,9 +66,9 @@ func (c *accountServiceClient) CreateUser(ctx context.Context, in *CreateUserReq
 	return out, nil
 }
 
-func (c *accountServiceClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error) {
+func (c *accountServiceClient) VerifyEmail(ctx context.Context, in *v1.VerifyEmailRequest, opts ...grpc.CallOption) (*v1.VerifyEmailResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(VerifyEmailResponse)
+	out := new(v1.VerifyEmailResponse)
 	err := c.cc.Invoke(ctx, AccountService_VerifyEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -75,9 +76,9 @@ func (c *accountServiceClient) VerifyEmail(ctx context.Context, in *VerifyEmailR
 	return out, nil
 }
 
-func (c *accountServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+func (c *accountServiceClient) Login(ctx context.Context, in *v1.LoginRequest, opts ...grpc.CallOption) (*v1.LoginResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LoginResponse)
+	out := new(v1.LoginResponse)
 	err := c.cc.Invoke(ctx, AccountService_Login_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -85,9 +86,9 @@ func (c *accountServiceClient) Login(ctx context.Context, in *LoginRequest, opts
 	return out, nil
 }
 
-func (c *accountServiceClient) RenewAccessToken(ctx context.Context, in *RenewAccessTokenRequest, opts ...grpc.CallOption) (*RenewAccessTokenResponse, error) {
+func (c *accountServiceClient) RenewAccessToken(ctx context.Context, in *v1.RenewAccessTokenRequest, opts ...grpc.CallOption) (*v1.RenewAccessTokenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RenewAccessTokenResponse)
+	out := new(v1.RenewAccessTokenResponse)
 	err := c.cc.Invoke(ctx, AccountService_RenewAccessToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -99,11 +100,11 @@ func (c *accountServiceClient) RenewAccessToken(ctx context.Context, in *RenewAc
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility.
 type AccountServiceServer interface {
-	GetPublicKey(context.Context, *GetPublicKeyRequest) (*GetPublicKeyResponse, error)
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	RenewAccessToken(context.Context, *RenewAccessTokenRequest) (*RenewAccessTokenResponse, error)
+	GetPublicKey(context.Context, *v1.GetPublicKeyRequest) (*v1.GetPublicKeyResponse, error)
+	CreateUser(context.Context, *v1.CreateUserRequest) (*v1.CreateUserResponse, error)
+	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
+	Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
+	RenewAccessToken(context.Context, *v1.RenewAccessTokenRequest) (*v1.RenewAccessTokenResponse, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -114,19 +115,19 @@ type AccountServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAccountServiceServer struct{}
 
-func (UnimplementedAccountServiceServer) GetPublicKey(context.Context, *GetPublicKeyRequest) (*GetPublicKeyResponse, error) {
+func (UnimplementedAccountServiceServer) GetPublicKey(context.Context, *v1.GetPublicKeyRequest) (*v1.GetPublicKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPublicKey not implemented")
 }
-func (UnimplementedAccountServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+func (UnimplementedAccountServiceServer) CreateUser(context.Context, *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedAccountServiceServer) VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error) {
+func (UnimplementedAccountServiceServer) VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmail not implemented")
 }
-func (UnimplementedAccountServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+func (UnimplementedAccountServiceServer) Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedAccountServiceServer) RenewAccessToken(context.Context, *RenewAccessTokenRequest) (*RenewAccessTokenResponse, error) {
+func (UnimplementedAccountServiceServer) RenewAccessToken(context.Context, *v1.RenewAccessTokenRequest) (*v1.RenewAccessTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewAccessToken not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
@@ -151,7 +152,7 @@ func RegisterAccountServiceServer(s grpc.ServiceRegistrar, srv AccountServiceSer
 }
 
 func _AccountService_GetPublicKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPublicKeyRequest)
+	in := new(v1.GetPublicKeyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -163,13 +164,13 @@ func _AccountService_GetPublicKey_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: AccountService_GetPublicKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).GetPublicKey(ctx, req.(*GetPublicKeyRequest))
+		return srv.(AccountServiceServer).GetPublicKey(ctx, req.(*v1.GetPublicKeyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
+	in := new(v1.CreateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -181,13 +182,13 @@ func _AccountService_CreateUser_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: AccountService_CreateUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(AccountServiceServer).CreateUser(ctx, req.(*v1.CreateUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_VerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifyEmailRequest)
+	in := new(v1.VerifyEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,13 +200,13 @@ func _AccountService_VerifyEmail_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: AccountService_VerifyEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).VerifyEmail(ctx, req.(*VerifyEmailRequest))
+		return srv.(AccountServiceServer).VerifyEmail(ctx, req.(*v1.VerifyEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+	in := new(v1.LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -217,13 +218,13 @@ func _AccountService_Login_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: AccountService_Login_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AccountServiceServer).Login(ctx, req.(*v1.LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountService_RenewAccessToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RenewAccessTokenRequest)
+	in := new(v1.RenewAccessTokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -235,7 +236,7 @@ func _AccountService_RenewAccessToken_Handler(srv interface{}, ctx context.Conte
 		FullMethod: AccountService_RenewAccessToken_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountServiceServer).RenewAccessToken(ctx, req.(*RenewAccessTokenRequest))
+		return srv.(AccountServiceServer).RenewAccessToken(ctx, req.(*v1.RenewAccessTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -4,8 +4,7 @@ package account.auth.v1;
 
 import "account/model/v1/user.proto";
 
-option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
-
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1;accountv1";
 message VerifyEmailRequest {
   string verify_email_id = 1;
   string secret_code = 2;

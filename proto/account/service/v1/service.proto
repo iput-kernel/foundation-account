@@ -9,7 +9,7 @@ import "account/auth/v1/renew_access_token.proto";
 import "account/auth/v1/verify_email.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/service/v1;accountv1";
 
 service AccountService {
   rpc GetPublicKey(account.auth.v1.GetPublicKeyRequest) returns (account.auth.v1.GetPublicKeyResponse) {

@@ -1,18 +1,24 @@
 version: v2
+managed:
+  enabled: true
+
+clean: true
+
 plugins:
-  - name: go
+  - remote: buf.build/grpc/go:v1.5.1
     out: internal/pb
     opt:
       - paths=source_relative
-  - name: go-grpc
+  # dependencies
+  - remote: buf.build/protocolbuffers/go:v1.34.2
     out: internal/pb
     opt:
       - paths=source_relative
-  - name: grpc-gateway
+  - remote: buf.build/grpc-ecosystem/gateway
     out: internal/pb
     opt:
       - paths=source_relative
-  - name: openapiv2
+  - remote: buf.build/grpc-ecosystem/openapiv2
     out: docs/swagger
     opt:
       - allow_merge=true

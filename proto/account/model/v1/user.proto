@@ -4,7 +4,7 @@ package account.model.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/model/v1;accountv1";
 
 message User {
   string email = 1;

@@ -1,7 +1,5 @@
 version: v2
 modules:
-  # Each module entry defines a path, which must be relative to the directory where the
-  # buf.yaml is located. You can also specify directories to exclude from a module.
   - path: proto
     name: buf.build/iput-kernel/foundation-account
 deps:

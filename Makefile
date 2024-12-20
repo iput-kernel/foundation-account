@@ -44,6 +44,7 @@ server:
 
 proto:
 	rm -f docs/swagger/*.swagger.json
+	rm -rf internal/pb/*
 	buf generate
 	statik -src=./docs/swagger -dest=./docs
 

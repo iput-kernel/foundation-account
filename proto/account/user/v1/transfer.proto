@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package account.user.v1;
 
-option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/user/v1;accountv1";
 
 message TransferRequest {
   string from_user_id = 1;

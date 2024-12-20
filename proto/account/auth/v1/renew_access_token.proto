@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package account.auth.v1;
 
-option go_package = "github.com/iput-kernel/foundation-account/internal/pb";
+option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1;accountv1";
 
 message RenewAccessTokenRequest {
   string refresh_token = 1;
