@@ -6,7 +6,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/iput-kernel/foundation-account/internal/application/auth"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
+	modelv1 "github.com/iput-kernel/foundation-account/internal/pb/account/model/v1"
 	"github.com/iput-kernel/foundation-account/internal/validation"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -14,7 +15,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (server *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (server *Server) Login(ctx context.Context, req *accountv1.LoginRequest) (*accountv1.LoginResponse, error) {
 	violations := validateLoginRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
@@ -63,8 +64,8 @@ func (server *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 		return nil, status.Errorf(codes.Internal, "セッションの作成に失敗しました")
 	}
 
-	rsp := &pb.LoginResponse{
-		User: &pb.User{
+	rsp := &accountv1.LoginResponse{
+		User: &modelv1.User{
 			Username:  authResult.Name,
 			Email:     authResult.Email,
 			CreatedAt: timestamppb.New(authResult.CreatedAt),
@@ -79,7 +80,7 @@ func (server *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	return rsp, nil
 }
 
-func validateLoginRequest(req *pb.LoginRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+func validateLoginRequest(req *accountv1.LoginRequest) (violations []*errdetails.BadRequest_FieldViolation) {
 	if err := validation.ValidateEmail(req.GetEmail()); err != nil {
 		violations = append(violations, fieldViolation("email", err))
 	}

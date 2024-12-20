@@ -14,7 +14,7 @@ import (
 	"github.com/iput-kernel/foundation-account/internal/gapi"
 	"github.com/iput-kernel/foundation-account/internal/infra/db/repository"
 	"github.com/iput-kernel/foundation-account/internal/infra/worker"
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/service/v1"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
@@ -110,7 +110,7 @@ func runGrpcServer(
 
 	gprcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
 	grpcServer := grpc.NewServer(gprcLogger)
-	pb.RegisterAccountServiceServer(grpcServer, server)
+	accountv1.RegisterAccountServiceServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
 	GRPCServerAddress := net.JoinHostPort(config.Host, config.GRPCPort)

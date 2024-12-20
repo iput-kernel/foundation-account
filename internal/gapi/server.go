@@ -8,12 +8,12 @@ import (
 	"github.com/iput-kernel/foundation-account/internal/config"
 	"github.com/iput-kernel/foundation-account/internal/infra/db/repository"
 	"github.com/iput-kernel/foundation-account/internal/infra/worker"
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/service/v1"
 )
 
 // Server serves gRPC requests for our banking service.
 type Server struct {
-	pb.UnimplementedAccountServiceServer
+	accountv1.UnimplementedAccountServiceServer
 	publicKey       ed25519.PublicKey
 	config          config.Config
 	store           repository.DAO

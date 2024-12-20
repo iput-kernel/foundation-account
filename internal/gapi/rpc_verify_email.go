@@ -6,7 +6,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/iput-kernel/foundation-account/internal/domain"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
+	modelv1 "github.com/iput-kernel/foundation-account/internal/pb/account/model/v1"
 	"github.com/iput-kernel/foundation-account/internal/validation"
 
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
@@ -15,7 +16,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (server *Server) VerifyEmail(ctx context.Context, req *pb.VerifyEmailRequest) (*pb.VerifyEmailResponse, error) {
+func (server *Server) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmailRequest) (*accountv1.VerifyEmailResponse, error) {
 	violations := validateVerifyEmailRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
@@ -49,8 +50,8 @@ func (server *Server) VerifyEmail(ctx context.Context, req *pb.VerifyEmailReques
 		return nil, status.Errorf(codes.Internal, "本登録に失敗しました。")
 	}
 
-	rsp := &pb.VerifyEmailResponse{
-		User: &pb.User{
+	rsp := &accountv1.VerifyEmailResponse{
+		User: &modelv1.User{
 			Email:     createUserResult.Email,
 			Username:  createUserResult.Name,
 			CreatedAt: timestamppb.New(createUserResult.CreatedAt),
@@ -59,7 +60,7 @@ func (server *Server) VerifyEmail(ctx context.Context, req *pb.VerifyEmailReques
 	return rsp, nil
 }
 
-func validateVerifyEmailRequest(req *pb.VerifyEmailRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+func validateVerifyEmailRequest(req *accountv1.VerifyEmailRequest) (violations []*errdetails.BadRequest_FieldViolation) {
 	if err := validation.ValidateEmailId(req.GetVerifyEmailId()); err != nil {
 		violations = append(violations, fieldViolation("email_id", err))
 	}

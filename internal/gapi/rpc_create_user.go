@@ -11,14 +11,14 @@ import (
 	"github.com/iput-kernel/foundation-account/internal/infra/db/repository"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
 	"github.com/iput-kernel/foundation-account/internal/infra/worker"
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
 	"github.com/iput-kernel/foundation-account/internal/util"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (server *Server) CreateUser(ctx context.Context, req *accountv1.CreateUserRequest) (*accountv1.CreateUserResponse, error) {
 	role := domain.DetectRole(req.GetEmail())
 	if role == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "サービス対象外のメールアドレスです。")
@@ -59,7 +59,7 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		return nil, status.Errorf(codes.Internal, "ユーザーの作成に失敗: %s", err)
 	}
 
-	rsp := &pb.CreateUserResponse{
+	rsp := &accountv1.CreateUserResponse{
 		User: convertUser(txResult.User),
 	}
 

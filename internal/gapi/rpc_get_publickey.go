@@ -6,10 +6,10 @@ import (
 	"encoding/pem"
 	"fmt"
 
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
 )
 
-func (server *Server) GetPublicKey(ctx context.Context, req *pb.Empty) (*pb.GetPublicKeyResponse, error) {
+func (server *Server) GetPublicKey(ctx context.Context, req *accountv1.GetPublicKeyRequest) (*accountv1.GetPublicKeyResponse, error) {
 	x509EncodedPub, err := x509.MarshalPKIXPublicKey(server.publicKey)
 	if err != nil {
 		fmt.Println("Error encoding public key:", err)
@@ -22,7 +22,7 @@ func (server *Server) GetPublicKey(ctx context.Context, req *pb.Empty) (*pb.GetP
 		Bytes: x509EncodedPub,
 	})
 
-	rsp := &pb.GetPublicKeyResponse{
+	rsp := &accountv1.GetPublicKeyResponse{
 		PublicKey: string(pemEncodedPub),
 	}
 	return rsp, nil

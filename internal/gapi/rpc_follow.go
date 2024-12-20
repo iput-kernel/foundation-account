@@ -3,9 +3,9 @@ package gapi
 import (
 	"context"
 
-	"github.com/iput-kernel/foundation-account/internal/pb"
+	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/user/v1"
 )
 
-func (server *Server) Follow(ctx context.Context, req *pb.FollowRequest) (*pb.FollowResponse, error) {
+func (server *Server) Follow(ctx context.Context, req *accountv1.FollowRequest) (*accountv1.FollowResponse, error) {
 	return nil, nil
 }
