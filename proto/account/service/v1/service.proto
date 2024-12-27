@@ -7,6 +7,7 @@ import "account/auth/v1/login.proto";
 import "account/auth/v1/public_key.proto";
 import "account/auth/v1/renew_access_token.proto";
 import "account/auth/v1/verify_email.proto";
+import "account/user/v1/transfer.proto";
 import "google/api/annotations.proto";
 
 option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/service/v1;accountv1";
@@ -36,6 +37,12 @@ service AccountService {
   rpc RenewAccessToken(account.auth.v1.RenewAccessTokenRequest) returns (account.auth.v1.RenewAccessTokenResponse) {
     option (google.api.http) = {
       post: "/account/v1/renew_access_token"
+      body: "*"
+    };
+  }
+  rpc Transfer(account.user.v1.TransferRequest) returns (account.user.v1.TransferResponse) {
+    option (google.api.http) = {
+      post: "/account/v1/transfer"
       body: "*"
     };
   }

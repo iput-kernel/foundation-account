@@ -5,11 +5,13 @@ package account.user.v1;
 option go_package = "github.com/iput-kernel/foundation-account/internal/pb/account/user/v1;accountv1";
 
 message TransferRequest {
-  string from_user_id = 1;
-  string to_user_id = 2;
-  string amount = 3;
+  string from_user_name = 1;
+  string to_user_name = 2;
+  int64 amount = 3;
 }
 
 message TransferResponse {
-  string statement_id = 1;
+  string from_user_name = 1;
+  string to_user_name = 2;
+  int64 amount = 3;
 }

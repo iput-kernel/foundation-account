@@ -6,9 +6,14 @@ Project FOUNDATION_ACCOUNT {
   '''
 }
 
+Table thresholds {
+  level int [pk, not null]
+  credit bigint [not null]
+}
+
 Table follows {
   following_user_id uuid [ref: > users.id, not null]
-  followed_user_id uuid [ref: >users.id, not null]
+  followed_user_id uuid [ref: > users.id, not null]
   created_at timestamptz [not null, default: `now()`]
 }
 

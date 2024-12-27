@@ -134,6 +134,38 @@
         ]
       }
     },
+    "/account/v1/transfer": {
+      "post": {
+        "operationId": "AccountService_Transfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TransferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TransferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
     "/account/v1/verify_email": {
       "post": {
         "operationId": "AccountService_VerifyEmail",
@@ -278,6 +310,36 @@
         },
         "accessTokenExpiresAt": {
           "type": "string"
+        }
+      }
+    },
+    "v1TransferRequest": {
+      "type": "object",
+      "properties": {
+        "fromUserName": {
+          "type": "string"
+        },
+        "toUserName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1TransferResponse": {
+      "type": "object",
+      "properties": {
+        "fromUserName": {
+          "type": "string"
+        },
+        "toUserName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

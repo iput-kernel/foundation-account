@@ -11,24 +11,31 @@ import (
 	"github.com/google/uuid"
 )
 
-const createEntry = `-- name: CreateEntry :one
+const createStatement = `-- name: CreateStatement :one
 INSERT INTO statements (
   id,
   user_id,
-  amount
+  amount,
+  reason
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4
 ) RETURNING id, user_id, amount, reason, created_at
 `
 
-type CreateEntryParams struct {
+type CreateStatementParams struct {
 	ID     uuid.UUID `json:"id"`
 	UserID uuid.UUID `json:"user_id"`
 	Amount int64     `json:"amount"`
+	Reason string    `json:"reason"`
 }
 
-func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Statement, error) {
-	row := q.db.QueryRow(ctx, createEntry, arg.ID, arg.UserID, arg.Amount)
+func (q *Queries) CreateStatement(ctx context.Context, arg CreateStatementParams) (Statement, error) {
+	row := q.db.QueryRow(ctx, createStatement,
+		arg.ID,
+		arg.UserID,
+		arg.Amount,
+		arg.Reason,
+	)
 	var i Statement
 	err := row.Scan(
 		&i.ID,

@@ -22,6 +22,8 @@ func createRandomUser(t *testing.T) db.User {
 		PasswordHash: hashedPassword,
 		Email:        util.RandomEmail(),
 		Role:         db.RoleStudent,
+		Credit:       100,
+		Level:        1,
 	}
 
 	user, err := testDAO.CreateUser(context.Background(), arg)

@@ -23,3 +23,22 @@ WHERE name = $1 LIMIT 1;
 -- name: GetUserByEmail :one
 SELECT * FROM users
 WHERE email = $1 LIMIT 1;
+
+-- name: UpdateUser :one
+UPDATE users
+SET 
+  name = COALESCE(sqlc.narg(name), name),
+  email = COALESCE(sqlc.narg(email), email),
+  password_hash = COALESCE(sqlc.narg(password_hash), password_hash),
+  credit = COALESCE(sqlc.narg(credit), credit),
+  level = COALESCE(sqlc.narg(level), level)
+WHERE id = sqlc.arg(id)
+RETURNING *;
+
+-- name: AddUserCredit :one
+UPDATE users
+SET 
+  credit = credit + sqlc.arg(amount),
+  level = level + sqlc.arg(level)
+WHERE id = sqlc.arg(id)
+RETURNING *;

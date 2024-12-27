@@ -9,7 +9,40 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const addUserCredit = `-- name: AddUserCredit :one
+UPDATE users
+SET 
+  credit = credit + $1,
+  level = level + $2
+WHERE id = $3
+RETURNING id, name, email, password_hash, role, credit, level, updated_at, created_at
+`
+
+type AddUserCreditParams struct {
+	Amount int64     `json:"amount"`
+	Level  int32     `json:"level"`
+	ID     uuid.UUID `json:"id"`
+}
+
+func (q *Queries) AddUserCredit(ctx context.Context, arg AddUserCreditParams) (User, error) {
+	row := q.db.QueryRow(ctx, addUserCredit, arg.Amount, arg.Level, arg.ID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.PasswordHash,
+		&i.Role,
+		&i.Credit,
+		&i.Level,
+		&i.UpdatedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO "users" (
@@ -112,6 +145,51 @@ WHERE name = $1 LIMIT 1
 
 func (q *Queries) GetUserByName(ctx context.Context, name string) (User, error) {
 	row := q.db.QueryRow(ctx, getUserByName, name)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.PasswordHash,
+		&i.Role,
+		&i.Credit,
+		&i.Level,
+		&i.UpdatedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updateUser = `-- name: UpdateUser :one
+UPDATE users
+SET 
+  name = COALESCE($1, name),
+  email = COALESCE($2, email),
+  password_hash = COALESCE($3, password_hash),
+  credit = COALESCE($4, credit),
+  level = COALESCE($5, level)
+WHERE id = $6
+RETURNING id, name, email, password_hash, role, credit, level, updated_at, created_at
+`
+
+type UpdateUserParams struct {
+	Name         pgtype.Text `json:"name"`
+	Email        pgtype.Text `json:"email"`
+	PasswordHash pgtype.Text `json:"password_hash"`
+	Credit       pgtype.Int8 `json:"credit"`
+	Level        pgtype.Int4 `json:"level"`
+	ID           uuid.UUID   `json:"id"`
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUser,
+		arg.Name,
+		arg.Email,
+		arg.PasswordHash,
+		arg.Credit,
+		arg.Level,
+		arg.ID,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,

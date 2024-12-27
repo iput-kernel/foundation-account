@@ -1,10 +1,11 @@
--- name: CreateEntry :one
+-- name: CreateStatement :one
 INSERT INTO statements (
   id,
   user_id,
-  amount
+  amount,
+  reason
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4
 ) RETURNING *;
 
 -- name: GetStatements :one

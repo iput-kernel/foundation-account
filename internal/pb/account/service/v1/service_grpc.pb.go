@@ -9,6 +9,7 @@ package accountv1
 import (
 	context "context"
 	v1 "github.com/iput-kernel/foundation-account/internal/pb/account/auth/v1"
+	v11 "github.com/iput-kernel/foundation-account/internal/pb/account/user/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -25,6 +26,7 @@ const (
 	AccountService_VerifyEmail_FullMethodName      = "/account.service.v1.AccountService/VerifyEmail"
 	AccountService_Login_FullMethodName            = "/account.service.v1.AccountService/Login"
 	AccountService_RenewAccessToken_FullMethodName = "/account.service.v1.AccountService/RenewAccessToken"
+	AccountService_Transfer_FullMethodName         = "/account.service.v1.AccountService/Transfer"
 )
 
 // AccountServiceClient is the client API for AccountService service.
@@ -36,6 +38,7 @@ type AccountServiceClient interface {
 	VerifyEmail(ctx context.Context, in *v1.VerifyEmailRequest, opts ...grpc.CallOption) (*v1.VerifyEmailResponse, error)
 	Login(ctx context.Context, in *v1.LoginRequest, opts ...grpc.CallOption) (*v1.LoginResponse, error)
 	RenewAccessToken(ctx context.Context, in *v1.RenewAccessTokenRequest, opts ...grpc.CallOption) (*v1.RenewAccessTokenResponse, error)
+	Transfer(ctx context.Context, in *v11.TransferRequest, opts ...grpc.CallOption) (*v11.TransferResponse, error)
 }
 
 type accountServiceClient struct {
@@ -96,6 +99,16 @@ func (c *accountServiceClient) RenewAccessToken(ctx context.Context, in *v1.Rene
 	return out, nil
 }
 
+func (c *accountServiceClient) Transfer(ctx context.Context, in *v11.TransferRequest, opts ...grpc.CallOption) (*v11.TransferResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(v11.TransferResponse)
+	err := c.cc.Invoke(ctx, AccountService_Transfer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServiceServer is the server API for AccountService service.
 // All implementations must embed UnimplementedAccountServiceServer
 // for forward compatibility.
@@ -105,6 +118,7 @@ type AccountServiceServer interface {
 	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
 	Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
 	RenewAccessToken(context.Context, *v1.RenewAccessTokenRequest) (*v1.RenewAccessTokenResponse, error)
+	Transfer(context.Context, *v11.TransferRequest) (*v11.TransferResponse, error)
 	mustEmbedUnimplementedAccountServiceServer()
 }
 
@@ -129,6 +143,9 @@ func (UnimplementedAccountServiceServer) Login(context.Context, *v1.LoginRequest
 }
 func (UnimplementedAccountServiceServer) RenewAccessToken(context.Context, *v1.RenewAccessTokenRequest) (*v1.RenewAccessTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewAccessToken not implemented")
+}
+func (UnimplementedAccountServiceServer) Transfer(context.Context, *v11.TransferRequest) (*v11.TransferResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Transfer not implemented")
 }
 func (UnimplementedAccountServiceServer) mustEmbedUnimplementedAccountServiceServer() {}
 func (UnimplementedAccountServiceServer) testEmbeddedByValue()                        {}
@@ -241,6 +258,24 @@ func _AccountService_RenewAccessToken_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccountService_Transfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v11.TransferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).Transfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccountService_Transfer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).Transfer(ctx, req.(*v11.TransferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccountService_ServiceDesc is the grpc.ServiceDesc for AccountService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -267,6 +302,10 @@ var AccountService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenewAccessToken",
 			Handler:    _AccountService_RenewAccessToken_Handler,
+		},
+		{
+			MethodName: "Transfer",
+			Handler:    _AccountService_Transfer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

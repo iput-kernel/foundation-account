@@ -22,10 +22,10 @@ migratedown:
 	migrate -path internal/infra/db/migration -database "$(DB_URL)" -verbose down
 
 migratedown1:
-	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
+	migrate -path internal/infra/db/migration -database "$(DB_URL)" -verbose down 1
 
 new_migration:
-	migrate create -ext sql -dir db/migration -seq $(name)
+	migrate create -ext sql -dir internal/infra/db/migration -seq $(name)
 
 db_docs:
 	dbdocs build docs/account.dbml

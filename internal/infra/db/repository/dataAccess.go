@@ -12,6 +12,7 @@ type DAO interface {
 	db.Querier
 	TxFollow(ctx context.Context, arg TxFollowParams) (TxFollowResult, error)
 	TxCreateUser(ctx context.Context, arg TxCreateUserParam) (TxCreateUserResult, error)
+	TxTransfer(ctx context.Context, arg TxTransferParam) (TxTransferResult, error)
 }
 
 // トランザクションに利用するツールとクエリを一通り格納
