@@ -1,4 +1,4 @@
-package gapi
+package service
 
 import (
 	"context"
@@ -14,7 +14,7 @@ func (server *Server) authFunc(ctx context.Context) (context.Context, error) {
 		return nil, err
 	}
 
-	payload, err := server.tokenMaker.VerifyToken(token)
+	payload, err := server.TokenMaker.VerifyToken(token)
 	if err != nil {
 		return nil, status.Errorf(codes.Unauthenticated, "無効なトークンです: %s", err)
 	}

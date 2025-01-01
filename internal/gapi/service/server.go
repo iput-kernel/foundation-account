@@ -1,4 +1,4 @@
-package gapi
+package service
 
 import (
 	"crypto/ed25519"
@@ -14,11 +14,11 @@ import (
 // Server serves gRPC requests for our banking service.
 type Server struct {
 	accountv1.UnimplementedAccountServiceServer
-	publicKey       ed25519.PublicKey
-	config          config.Config
-	store           repository.DAO
-	tokenMaker      auth.Maker
-	taskDistributor worker.TaskDistributor
+	PublicKey       ed25519.PublicKey
+	Config          config.Config
+	Store           repository.DAO
+	TokenMaker      auth.Maker
+	TaskDistributor worker.TaskDistributor
 }
 
 // NewServer creates a new gRPC server.
@@ -33,11 +33,11 @@ func NewServer(config config.Config, store repository.DAO, taskDistributor worke
 	}
 
 	server := &Server{
-		publicKey:       publicKey,
-		config:          config,
-		store:           store,
-		tokenMaker:      tokenMaker,
-		taskDistributor: taskDistributor,
+		PublicKey:       publicKey,
+		Config:          config,
+		Store:           store,
+		TokenMaker:      tokenMaker,
+		TaskDistributor: taskDistributor,
 	}
 
 	return server, nil

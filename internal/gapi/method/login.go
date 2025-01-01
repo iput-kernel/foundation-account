@@ -1,4 +1,4 @@
-package gapi
+package method
 
 import (
 	"context"
@@ -15,13 +15,13 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (server *Server) Login(ctx context.Context, req *accountv1.LoginRequest) (*accountv1.LoginResponse, error) {
+func (server *Method) Login(ctx context.Context, req *accountv1.LoginRequest) (*accountv1.LoginResponse, error) {
 	violations := validateLoginRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
 
-	authResult, err := server.store.GetUserByEmail(ctx, req.GetEmail())
+	authResult, err := server.Store.GetUserByEmail(ctx, req.GetEmail())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "内部エラーです")
 	}
@@ -31,27 +31,27 @@ func (server *Server) Login(ctx context.Context, req *accountv1.LoginRequest) (*
 		return nil, status.Errorf(codes.Unauthenticated, "IDまたはパスワードが正しくありません")
 	}
 
-	accessToken, accessPayload, err := server.tokenMaker.CreateToken(
+	accessToken, accessPayload, err := server.TokenMaker.CreateToken(
 		authResult.ID.String(),
 		authResult.Role,
-		server.config.Token.AccessDuration,
+		server.Config.Token.AccessDuration,
 	)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "トークンの作成に失敗しました")
 	}
 
-	refreshToken, refreshPayload, err := server.tokenMaker.CreateToken(
+	refreshToken, refreshPayload, err := server.TokenMaker.CreateToken(
 		authResult.ID.String(),
 		authResult.Role,
-		server.config.Token.RefreshDuration,
+		server.Config.Token.RefreshDuration,
 	)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "トークンの作成に失敗しました")
 	}
 
-	mtdt := server.extractMetadata(ctx)
-	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
+	mtdt := server.ExtractMetadata(ctx)
+	session, err := server.Store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           uuid.New(),
 		UserID:       authResult.ID,
 		RefreshToken: refreshToken,

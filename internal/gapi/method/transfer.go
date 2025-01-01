@@ -1,4 +1,4 @@
-package gapi
+package method
 
 import (
 	"context"
@@ -9,13 +9,13 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (server *Server) Transfer(ctx context.Context, req *accountv1.TransferRequest) (*accountv1.TransferResponse, error) {
-	fromUser, err := server.store.GetUserByName(ctx, req.GetFromUserName())
+func (server *Method) Transfer(ctx context.Context, req *accountv1.TransferRequest) (*accountv1.TransferResponse, error) {
+	fromUser, err := server.Store.GetUserByName(ctx, req.GetFromUserName())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "内部エラーが発生しました")
 	}
 
-	toUser, err := server.store.GetUserByName(ctx, req.GetToUserName())
+	toUser, err := server.Store.GetUserByName(ctx, req.GetToUserName())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "内部エラーが発生しました")
 	}
@@ -26,7 +26,7 @@ func (server *Server) Transfer(ctx context.Context, req *accountv1.TransferReque
 		Amount:   req.GetAmount(),
 	}
 
-	result, err := server.store.TxTransfer(ctx, arg)
+	result, err := server.Store.TxTransfer(ctx, arg)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "内部エラーが発生しました")
 	}

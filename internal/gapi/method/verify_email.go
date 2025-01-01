@@ -1,4 +1,4 @@
-package gapi
+package method
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (server *Server) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmailRequest) (*accountv1.VerifyEmailResponse, error) {
+func (server *Method) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmailRequest) (*accountv1.VerifyEmailResponse, error) {
 	violations := validateVerifyEmailRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
@@ -25,7 +25,7 @@ func (server *Server) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmai
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "IDが無効な形式です")
 	}
-	verifyResult, err := server.store.GetVerifyEmail(ctx, verifyEmailId)
+	verifyResult, err := server.Store.GetVerifyEmail(ctx, verifyEmailId)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "内部エラーが発生しました。")
 	}
@@ -41,11 +41,11 @@ func (server *Server) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmai
 		Email:        verifyResult.Email,
 		PasswordHash: verifyResult.PasswordHash,
 		Role:         *role,
-		Credit:       int64(server.config.Cred.DefaultCredit),
+		Credit:       int64(server.Config.Cred.DefaultCredit),
 		Level:        1,
 	}
 
-	createUserResult, err := server.store.CreateUser(ctx, arg)
+	createUserResult, err := server.Store.CreateUser(ctx, arg)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "本登録に失敗しました。")
 	}

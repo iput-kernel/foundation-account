@@ -1,4 +1,4 @@
-package gapi
+package method
 
 import (
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"

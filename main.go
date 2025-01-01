@@ -11,7 +11,8 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/iput-kernel/foundation-account/internal/application/mail"
 	"github.com/iput-kernel/foundation-account/internal/config"
-	"github.com/iput-kernel/foundation-account/internal/gapi"
+	"github.com/iput-kernel/foundation-account/internal/gapi/method"
+	"github.com/iput-kernel/foundation-account/internal/gapi/service"
 	"github.com/iput-kernel/foundation-account/internal/infra/db/repository"
 	"github.com/iput-kernel/foundation-account/internal/infra/worker"
 	accountv1 "github.com/iput-kernel/foundation-account/internal/pb/account/service/v1"
@@ -65,7 +66,7 @@ func main() {
 
 	err = waitGroup.Wait()
 	if err != nil {
-		log.Fatal().Err(err).Msg("error from wait group")
+		log.Fatal().Err(err).Msg("wait groupでエラーが発生")
 	}
 }
 
@@ -103,14 +104,15 @@ func runGrpcServer(
 	store repository.DAO,
 	taskDistributor worker.TaskDistributor,
 ) {
-	server, err := gapi.NewServer(config, store, taskDistributor)
+	server, err := service.NewServer(config, store, taskDistributor)
+	method := method.NewMethod(server)
 	if err != nil {
 		log.Fatal().Err(err).Msg("serverが作成できません")
 	}
 
-	gprcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
+	gprcLogger := grpc.UnaryInterceptor(service.GrpcLogger)
 	grpcServer := grpc.NewServer(gprcLogger)
-	accountv1.RegisterAccountServiceServer(grpcServer, server)
+	accountv1.RegisterAccountServiceServer(grpcServer, method)
 	reflection.Register(grpcServer)
 
 	GRPCServerAddress := net.JoinHostPort(config.Host, config.GRPCPort)
@@ -120,7 +122,7 @@ func runGrpcServer(
 	}
 
 	waitGroup.Go(func() error {
-		log.Info().Msgf("start gRPC server at %s", listener.Addr().String())
+		log.Info().Msgf("gRPCサーバー起動: %s", listener.Addr().String())
 
 		err = grpcServer.Serve(listener)
 		if err != nil {
