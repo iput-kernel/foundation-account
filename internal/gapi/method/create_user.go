@@ -54,7 +54,7 @@ func (server *Method) CreateUser(ctx context.Context, req *accountv1.CreateUserR
 	txResult, err := server.Store.TxCreateUser(ctx, arg)
 	if err != nil {
 		if repository.ErrorCode(err) == repository.UniqueViolation {
-			return nil, status.Errorf(codes.AlreadyExists, err.Error())
+			return nil, status.Error(codes.AlreadyExists, err.Error())
 		}
 		return nil, status.Errorf(codes.Internal, "ユーザーの作成に失敗: %s", err)
 	}
