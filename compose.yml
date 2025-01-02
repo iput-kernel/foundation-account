@@ -2,7 +2,6 @@ services:
   app:
     build:
       context: .
-      dockerfile: build/Dockerfile.dev
     tty: true
     ports:
       - 1323:1323
@@ -47,10 +46,10 @@ services:
       - .env
 
   mailhog:
-          image: mailhog/mailhog
-          ports:
-              - “8025:8025”
-              - “1025:1025”
+    image: mailhog/mailhog
+    ports:
+        - “8025:8025”
+        - “1025:1025”
 
 volumes:
   db-store:

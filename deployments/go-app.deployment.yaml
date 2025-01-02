@@ -7,14 +7,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-app
+      app: account-app
   template:
     metadata:
       labels:
-        app: go-app
+        app: account-app
     spec:
       containers:
       - name: go-app-pod
-        image: ghcr.io/cirrus-ltd/moves-clone-auth:6ab042d
+        image: ghcr.io/iput-kernel/account-app:latest
         ports:
         - containerPort: 8080

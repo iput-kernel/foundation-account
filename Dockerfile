@@ -19,6 +19,6 @@ WORKDIR /root/
 
 COPY --from=builder /app/tmp/main .
 
-ENV GIN_MODE=release
+ENV ENV=release
 
 CMD ["./main"]

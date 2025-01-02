@@ -5,7 +5,7 @@ metadata:
   namespace: iput-kernel-foundation
 spec:
   selector:
-    app: go-app
+    app: account-app
   ports:
     - protocol: TCP
       port: 80
