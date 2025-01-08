@@ -36,7 +36,7 @@ func GrpcLogger(
 		Int("status_code", int(statusCode)).
 		Str("status_text", statusCode.String()).
 		Dur("duration", duration).
-		Msg("received a gRPC request")
+		Msg("gRPCリクエストを受信")
 
 	return result, err
 }
@@ -78,6 +78,6 @@ func HttpLogger(handler http.Handler) http.Handler {
 			Int("status_code", rec.StatusCode).
 			Str("status_text", http.StatusText(rec.StatusCode)).
 			Dur("duration", duration).
-			Msg("received a HTTP request")
+			Msg("HTTPリクエストを受信")
 	})
 }

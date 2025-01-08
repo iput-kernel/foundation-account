@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: go-app-config
+  name: account-app-config
   namespace: iput-kernel-foundation
 data:
   SMTP_HOST: "mail"

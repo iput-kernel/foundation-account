@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-app-deployment
+  name: account-app-deployment
   namespace: iput-kernel-foundation
 spec:
   replicas: 1
@@ -14,7 +14,7 @@ spec:
         app: account-app
     spec:
       containers:
-      - name: go-app-pod
+      - name: account-app-pod
         image: ghcr.io/iput-kernel/account-app:latest
         ports:
         - containerPort: 8080

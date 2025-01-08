@@ -1,21 +1,19 @@
 services:
-  app:
+  account-app:
     build:
       context: .
-    tty: true
     ports:
-      - 1323:1323
+      - 1323:50051
+      - 80:80
     volumes:
       - ./:/app
-    environment:
-      - GO111MODULE=on
     env_file:
       - .env
     depends_on:
       db:
         condition: service_healthy
 
-  db:
+  account-db:
     image: postgres:15
     ports:
       - 5432:5432
@@ -33,25 +31,14 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
+  account-worker:
     image: redis:latest
     container_name: redis
     volumes:
       - redis:/var/lib/redis/data
-      - ./redis.conf:/etc/redis/redis.conf
-    command: "/etc/redis/redis.conf"
     ports:
       - "6379"
-    env_file:
-      - .env
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-        - “8025:8025”
-        - “1025:1025”
 
 volumes:
   db-store:
-  pgadmin-data:
   redis:
