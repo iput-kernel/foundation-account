@@ -1,17 +1,14 @@
 services:
   account-app:
-    build:
-      context: .
+    image: account-app:latest
     ports:
       - 1323:50051
       - 80:80
     volumes:
       - ./:/app
-    env_file:
-      - .env
     depends_on:
-      db:
-        condition: service_healthy
+      - account-db
+      - account-worker
 
   account-db:
     image: postgres:15
@@ -25,11 +22,6 @@ services:
       - POSTGRES_DB=${DB_NAME}
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   account-worker:
     image: redis:latest

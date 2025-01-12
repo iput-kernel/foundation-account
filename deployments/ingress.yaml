@@ -30,13 +30,6 @@ spec:
             name: facility-service
             port:
               number: 80
-      - path: /v1/timeslot
-        pathType: Prefix
-        backend:
-          service:
-            name: timeslot-service
-            port:
-              number: 80
       - path: /v1/project
         pathType: Prefix
         backend:

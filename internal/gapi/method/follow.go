@@ -7,5 +7,6 @@ import (
 )
 
 func (server *Method) Follow(ctx context.Context, req *accountv1.FollowRequest) (*accountv1.FollowResponse, error) {
+	
 	return nil, nil
 }

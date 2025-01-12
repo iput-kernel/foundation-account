@@ -1,3 +1,7 @@
+-- SQL dump generated using DBML (dbml.dbdiagram.io)
+-- Database: PostgreSQL
+-- Generated at: 2025-01-12T09:23:41.175Z
+
 CREATE TYPE "role" AS ENUM (
   'student',
   'teacher',
@@ -17,7 +21,6 @@ CREATE TABLE "users" (
   "password_hash" varchar NOT NULL,
   "role" role NOT NULL,
   "credit" bigint NOT NULL,
-  "level" int NOT NULL,
   "updated_at" timestamptz NOT NULL DEFAULT (now()),
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );

@@ -6,11 +6,6 @@ Project FOUNDATION_ACCOUNT {
   '''
 }
 
-Table thresholds {
-  level int [pk, not null]
-  credit bigint [not null]
-}
-
 Table follows {
   following_user_id uuid [ref: > users.id, not null]
   followed_user_id uuid [ref: > users.id, not null]
@@ -24,7 +19,6 @@ Table users {
   password_hash varchar [not null]
   role role [not null]
   credit bigint [not null]
-  level int [not null]
   updated_at timestamptz [not null, default: `now()`]
   created_at timestamptz [not null, default: `now()`]
 
