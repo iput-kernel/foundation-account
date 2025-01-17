@@ -17,7 +17,6 @@ func createRandomUser(t *testing.T) db.User {
 	require.NoError(t, err)
 	hashedPassword, err := auth.HashPassword(util.RandomString(6))
 	require.NoError(t, err)
-	require.NoError(t, err)
 	arg := db.CreateUserParams{
 		ID:           userID,
 		Name:         gofakeit.Name(),
