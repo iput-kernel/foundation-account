@@ -13,9 +13,10 @@ import (
 )
 
 func createRandomUser(t *testing.T) db.User {
+	userID, err := uuid.NewUUID()
+	require.NoError(t, err)
 	hashedPassword, err := auth.HashPassword(util.RandomString(6))
 	require.NoError(t, err)
-	userID, err := uuid.NewUUID()
 	require.NoError(t, err)
 	arg := db.CreateUserParams{
 		ID:           userID,
@@ -40,6 +41,15 @@ func createRandomUser(t *testing.T) db.User {
 	return user
 }
 
-func TestCreateUser(t *testing.T) {
-	createRandomUser(t)
+func deleteUser(t *testing.T, userID uuid.UUID) {
+	err := testDAO.DeleteUser(context.Background(), userID)
+	require.NoError(t, err)
+}
+
+func TestUser(t *testing.T) {
+	user1 := createRandomUser(t)
+	user2 := createRandomUser(t)
+
+	deleteUser(t, user1.ID)
+	deleteUser(t, user2.ID)
 }

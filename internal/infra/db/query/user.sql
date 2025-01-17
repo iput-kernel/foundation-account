@@ -39,3 +39,7 @@ SET
   credit = credit + sqlc.arg(amount)
 WHERE id = sqlc.arg(id)
 RETURNING *;
+
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1;

@@ -18,6 +18,7 @@ type Querier interface {
 	CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVerifyEmail(ctx context.Context, arg CreateVerifyEmailParams) (VerifyEmail, error)
+	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetStatements(ctx context.Context, id uuid.UUID) (Statement, error)
 	GetTransfer(ctx context.Context, id uuid.UUID) (Transfer, error)
