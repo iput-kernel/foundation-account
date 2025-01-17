@@ -14,10 +14,10 @@ type TokenConfig struct {
 }
 
 type CredConfig struct {
-	DefaultCredit    int `mapstructure:"DEFAULT"`
-	Level1Thereshold int `mapstructure:"LEVEL1"`
-	Level2Thereshold int `mapstructure:"LEVEL2"`
-	Level3Thereshold int `mapstructure:"LEVEL3"`
-	Level4Thereshold int `mapstructure:"LEVEL4"`
-	Level5Thereshold int `mapstructure:"LEVEL5"`
+	DefaultCredit    int64 `mapstructure:"DEFAULT"`
+	Level1Thereshold int64 `mapstructure:"LEVEL1"`
+	Level2Thereshold int64 `mapstructure:"LEVEL2"`
+	Level3Thereshold int64 `mapstructure:"LEVEL3"`
+	Level4Thereshold int64 `mapstructure:"LEVEL4"`
+	Level5Thereshold int64 `mapstructure:"LEVEL5"`
 }

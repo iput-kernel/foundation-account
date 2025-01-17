@@ -5,16 +5,14 @@ import (
 )
 
 type Config struct {
-	Environment string      `mapstructure:"ENV"`
-	Domain      string      `mapstructure:"DOMAIN"`
-	Host        string      `mapstructure:"HOST"`
-	GRPCPort    string      `mapstructure:"GRPC_PORT"`
-	GWPort      string      `mapstructure:"GW_PORT"`
-	Token       TokenConfig `mapstructure:"TOKEN"`
-	Cred        CredConfig  `mapstructure:"CRED"`
-	DB          DBConfig    `mapstructure:"DB"`
-	Redis       RedisConfig `mapstructure:"REDIS"`
-	EmailSender EmailConfig `mapstructure:"EMAIL"`
+	Environment string       `mapstructure:"ENV"`
+	SecretKey   string       `mapstructure:"SECRET_KEY"`
+	Server      ServerConfig `mapstructure:"SERVER"`
+	Token       TokenConfig  `mapstructure:"TOKEN"`
+	Cred        CredConfig   `mapstructure:"CRED"`
+	DB          DBConfig     `mapstructure:"DB"`
+	Redis       RedisConfig  `mapstructure:"REDIS"`
+	EmailSender EmailConfig  `mapstructure:"EMAIL"`
 }
 
 // LoadConfig reads configuration from file or environment variables.

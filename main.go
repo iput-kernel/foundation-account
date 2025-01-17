@@ -115,7 +115,7 @@ func runGrpcServer(
 	accountv1.RegisterAccountServiceServer(grpcServer, method)
 	reflection.Register(grpcServer)
 
-	GRPCServerAddress := net.JoinHostPort(config.Host, config.GRPCPort)
+	GRPCServerAddress := net.JoinHostPort(config.Server.Host, config.Server.GRPCPort)
 	listener, err := net.Listen("tcp", GRPCServerAddress)
 	if err != nil {
 		log.Fatal().Err(err).Msg("listenerの作成に失敗")

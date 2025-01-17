@@ -51,6 +51,7 @@ func ValidateEmailId(value string) error {
 	}
 	return nil
 }
+
 func ValidateSecretCode(value string) error {
 	return ValidateString(value, 32, 128)
 }

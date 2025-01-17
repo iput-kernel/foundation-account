@@ -1,19 +1,20 @@
 package auth
 
 import (
-	"crypto/ed25519"
 	"testing"
 	"time"
 
+	"github.com/iput-kernel/foundation-account/internal/config"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
 	"github.com/iput-kernel/foundation-account/internal/util"
 	"github.com/stretchr/testify/require"
 )
 
 func TestPasetoMaker(t *testing.T) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
+
+	config, err := config.LoadConfig("../../..")
 	require.NoError(t, err)
-	maker, err := NewPasetoMaker(publicKey, privateKey)
+	maker, err := NewPasetoMaker(config)
 	require.NoError(t, err)
 
 	email := util.RandomEmail()
@@ -23,7 +24,7 @@ func TestPasetoMaker(t *testing.T) {
 	issuedAt := time.Now()
 	expiredAt := issuedAt.Add(duration)
 
-	token, payload, err := maker.CreateToken(email, role, duration)
+	token, payload, err := maker.CreateToken(email, role, config.Cred.DefaultCredit, duration)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 	require.NotEmpty(t, payload)
@@ -40,12 +41,12 @@ func TestPasetoMaker(t *testing.T) {
 }
 
 func TestExpiredPasetoToken(t *testing.T) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
+	config, err := config.LoadConfig("../../..")
 	require.NoError(t, err)
-	maker, err := NewPasetoMaker(publicKey, privateKey)
+	maker, err := NewPasetoMaker(config)
 	require.NoError(t, err)
 
-	token, payload, err := maker.CreateToken(util.RandomOwner(), db.RoleStudent, -time.Minute)
+	token, payload, err := maker.CreateToken(util.RandomOwner(), db.RoleStudent, config.Cred.DefaultCredit, -time.Minute)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 	require.NotEmpty(t, payload)

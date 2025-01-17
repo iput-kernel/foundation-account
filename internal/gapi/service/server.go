@@ -23,17 +23,12 @@ type Server struct {
 
 // NewServer creates a new gRPC server.
 func NewServer(config config.Config, store repository.DAO, taskDistributor worker.TaskDistributor) (*Server, error) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		return nil, fmt.Errorf("公開鍵の生成に失敗: %w", err)
-	}
-	tokenMaker, err := auth.NewPasetoMaker(publicKey, privateKey)
+	tokenMaker, err := auth.NewPasetoMaker(config)
 	if err != nil {
 		return nil, fmt.Errorf("トークン生成機の作成に失敗: %w", err)
 	}
 
 	server := &Server{
-		PublicKey:       publicKey,
 		Config:          config,
 		Store:           store,
 		TokenMaker:      tokenMaker,

@@ -34,6 +34,7 @@ func (server *Method) Login(ctx context.Context, req *accountv1.LoginRequest) (*
 	accessToken, accessPayload, err := server.TokenMaker.CreateToken(
 		authResult.ID.String(),
 		authResult.Role,
+		server.Config.Cred.DefaultCredit,
 		server.Config.Token.AccessDuration,
 	)
 
@@ -44,6 +45,7 @@ func (server *Method) Login(ctx context.Context, req *accountv1.LoginRequest) (*
 	refreshToken, refreshPayload, err := server.TokenMaker.CreateToken(
 		authResult.ID.String(),
 		authResult.Role,
+		server.Config.Cred.DefaultCredit,
 		server.Config.Token.RefreshDuration,
 	)
 	if err != nil {
