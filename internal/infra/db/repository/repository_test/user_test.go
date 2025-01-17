@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/google/uuid"
 	"github.com/iput-kernel/foundation-account/internal/application/auth"
 	db "github.com/iput-kernel/foundation-account/internal/infra/db/sqlc"
@@ -18,21 +19,22 @@ func createRandomUser(t *testing.T) db.User {
 	require.NoError(t, err)
 	arg := db.CreateUserParams{
 		ID:           userID,
-		Name:         util.RandomOwner(),
+		Name:         gofakeit.Name(),
 		PasswordHash: hashedPassword,
-		Email:        util.RandomEmail(),
+		Email:        gofakeit.Email(),
 		Role:         db.RoleStudent,
-		Credit:       100,
-		Level:        1,
+		Credit:       cfg.Cred.DefaultCredit,
 	}
 
 	user, err := testDAO.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
 
+	require.Equal(t, arg.ID, user.ID)
 	require.Equal(t, arg.Name, user.Name)
 	require.Equal(t, arg.PasswordHash, user.PasswordHash)
 	require.Equal(t, arg.Email, user.Email)
+	require.Equal(t, arg.Role, user.Role)
 	require.NotZero(t, user.CreatedAt)
 
 	return user

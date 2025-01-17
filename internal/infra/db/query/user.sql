@@ -5,11 +5,10 @@ INSERT INTO "users" (
   email,
   password_hash,
   role,
-  credit,
-  level
+  credit
 )
 VALUES (
-  $1, $2, $3, $4, $5, $6, $7
+  $1, $2, $3, $4, $5, $6
 ) RETURNING *;
 
 -- name: GetUser :one
@@ -30,15 +29,13 @@ SET
   name = COALESCE(sqlc.narg(name), name),
   email = COALESCE(sqlc.narg(email), email),
   password_hash = COALESCE(sqlc.narg(password_hash), password_hash),
-  credit = COALESCE(sqlc.narg(credit), credit),
-  level = COALESCE(sqlc.narg(level), level)
+  credit = COALESCE(sqlc.narg(credit), credit)
 WHERE id = sqlc.arg(id)
 RETURNING *;
 
 -- name: AddUserCredit :one
 UPDATE users
 SET 
-  credit = credit + sqlc.arg(amount),
-  level = level + sqlc.arg(level)
+  credit = credit + sqlc.arg(amount)
 WHERE id = sqlc.arg(id)
 RETURNING *;

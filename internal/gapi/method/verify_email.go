@@ -41,8 +41,7 @@ func (server *Method) VerifyEmail(ctx context.Context, req *accountv1.VerifyEmai
 		Email:        verifyResult.Email,
 		PasswordHash: verifyResult.PasswordHash,
 		Role:         *role,
-		Credit:       int64(server.Config.Cred.DefaultCredit),
-		Level:        1,
+		Credit:       server.Config.Cred.DefaultCredit,
 	}
 
 	createUserResult, err := server.Store.CreateUser(ctx, arg)

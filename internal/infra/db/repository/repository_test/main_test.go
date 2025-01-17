@@ -11,17 +11,21 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+// テストでのグローバル変数
 var testDAO repository.DAO
+var cfg config.Config
 
 func TestMain(m *testing.M) {
-	config, err := config.LoadConfig(".")
+	var err error
+	cfg, err = config.LoadConfig("../../../../..")
+	log.Printf("config:%+v ", cfg)
 	if err != nil {
-		log.Fatal("cannot load config:", err)
+		log.Fatal("Cannot load config:", err)
 	}
 
-	connPool, err := pgxpool.New(context.Background(), config.DSN())
+	connPool, err := pgxpool.New(context.Background(), cfg.DSN())
 	if err != nil {
-		log.Fatal("cannot connect to db:", err)
+		log.Fatal("Cannot connect to db:", err)
 	}
 
 	testDAO = repository.NewDAO(connPool)

@@ -34,7 +34,7 @@ var interruptSignals = []os.Signal{
 func main() {
 	config, err := config.LoadConfig(".")
 	if err != nil {
-		log.Fatal().Err(err).Msg("設定が読み込めませんでした。")
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
 	if config.Environment == "DEV" {
@@ -46,7 +46,7 @@ func main() {
 
 	connPool, err := pgxpool.New(ctx, config.DSN())
 	if err != nil {
-		log.Fatal().Err(err).Msg("データベースに接続できませんでした")
+		log.Fatal().Err(err).Msg("Cannot connect to db")
 	}
 
 	store := repository.NewDAO(connPool)
@@ -66,7 +66,7 @@ func main() {
 
 	err = waitGroup.Wait()
 	if err != nil {
-		log.Fatal().Err(err).Msg("wait groupでエラーが発生")
+		log.Fatal().Err(err).Msg("error from wait group")
 	}
 }
 
@@ -80,18 +80,18 @@ func runTaskProcessor(
 	mailer := *mail.NewSendConfirmationMail(config.EmailSender.Name, config.EmailSender.Address, config.EmailSender.Password)
 	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 
-	log.Info().Msg("タスクプロセッサーを起動")
+	log.Info().Msg("Start task processor")
 	err := taskProcessor.Start()
 	if err != nil {
-		log.Fatal().Err(err).Msg("タスクプロセッサーの起動に失敗")
+		log.Fatal().Err(err).Msg("Failed to start task processor")
 	}
 
 	waitGroup.Go(func() error {
 		<-ctx.Done()
-		log.Info().Msg("タスクプロセッサーをgraceful shutdown")
+		log.Info().Msg("Graceful shutdown task processor")
 
 		taskProcessor.Shutdown()
-		log.Info().Msg("タスクプロセッサーが終了しました。")
+		log.Info().Msg("Task processor is stopped")
 
 		return nil
 	})
@@ -107,7 +107,7 @@ func runGrpcServer(
 	server, err := service.NewServer(config, store, taskDistributor)
 	method := method.NewMethod(server)
 	if err != nil {
-		log.Fatal().Err(err).Msg("serverが作成できません")
+		log.Fatal().Err(err).Msg("Cannot create server")
 	}
 
 	gprcLogger := grpc.UnaryInterceptor(service.GrpcLogger)
@@ -118,18 +118,18 @@ func runGrpcServer(
 	GRPCServerAddress := net.JoinHostPort(config.Server.Host, config.Server.GRPCPort)
 	listener, err := net.Listen("tcp", GRPCServerAddress)
 	if err != nil {
-		log.Fatal().Err(err).Msg("listenerの作成に失敗")
+		log.Fatal().Err(err).Msg("Cannot create listener")
 	}
 
 	waitGroup.Go(func() error {
-		log.Info().Msgf("gRPCサーバー起動: %s", listener.Addr().String())
+		log.Info().Msgf("Start gRPC server at %s", listener.Addr().String())
 
 		err = grpcServer.Serve(listener)
 		if err != nil {
 			if errors.Is(err, grpc.ErrServerStopped) {
 				return nil
 			}
-			log.Error().Err(err).Msg("gRPC serverがserveできません")
+			log.Error().Err(err).Msg("gRPC server failed to serve")
 			return err
 		}
 
@@ -139,10 +139,10 @@ func runGrpcServer(
 	// graceful shutdown
 	waitGroup.Go(func() error {
 		<-ctx.Done()
-		log.Info().Msg("gRPCサーバーをgraceful shutdown")
+		log.Info().Msg("Graceful shutdown gRPC server")
 
 		grpcServer.GracefulStop()
-		log.Info().Msg("gRPCサーバーが終了")
+		log.Info().Msg("gRPC server is stopped")
 
 		return nil
 	})

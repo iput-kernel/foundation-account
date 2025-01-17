@@ -15,20 +15,18 @@ import (
 const addUserCredit = `-- name: AddUserCredit :one
 UPDATE users
 SET 
-  credit = credit + $1,
-  level = level + $2
-WHERE id = $3
-RETURNING id, name, email, password_hash, role, credit, level, updated_at, created_at
+  credit = credit + $1
+WHERE id = $2
+RETURNING id, name, email, password_hash, role, credit, updated_at, created_at
 `
 
 type AddUserCreditParams struct {
 	Amount int64     `json:"amount"`
-	Level  int32     `json:"level"`
 	ID     uuid.UUID `json:"id"`
 }
 
 func (q *Queries) AddUserCredit(ctx context.Context, arg AddUserCreditParams) (User, error) {
-	row := q.db.QueryRow(ctx, addUserCredit, arg.Amount, arg.Level, arg.ID)
+	row := q.db.QueryRow(ctx, addUserCredit, arg.Amount, arg.ID)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -37,7 +35,6 @@ func (q *Queries) AddUserCredit(ctx context.Context, arg AddUserCreditParams) (U
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)
@@ -51,12 +48,11 @@ INSERT INTO "users" (
   email,
   password_hash,
   role,
-  credit,
-  level
+  credit
 )
 VALUES (
-  $1, $2, $3, $4, $5, $6, $7
-) RETURNING id, name, email, password_hash, role, credit, level, updated_at, created_at
+  $1, $2, $3, $4, $5, $6
+) RETURNING id, name, email, password_hash, role, credit, updated_at, created_at
 `
 
 type CreateUserParams struct {
@@ -66,7 +62,6 @@ type CreateUserParams struct {
 	PasswordHash string    `json:"password_hash"`
 	Role         Role      `json:"role"`
 	Credit       int64     `json:"credit"`
-	Level        int32     `json:"level"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -77,7 +72,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.PasswordHash,
 		arg.Role,
 		arg.Credit,
-		arg.Level,
 	)
 	var i User
 	err := row.Scan(
@@ -87,7 +81,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)
@@ -95,7 +88,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, email, password_hash, role, credit, level, updated_at, created_at FROM users
+SELECT id, name, email, password_hash, role, credit, updated_at, created_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
@@ -109,7 +102,6 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)
@@ -117,7 +109,7 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, email, password_hash, role, credit, level, updated_at, created_at FROM users
+SELECT id, name, email, password_hash, role, credit, updated_at, created_at FROM users
 WHERE email = $1 LIMIT 1
 `
 
@@ -131,7 +123,6 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)
@@ -139,7 +130,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const getUserByName = `-- name: GetUserByName :one
-SELECT id, name, email, password_hash, role, credit, level, updated_at, created_at FROM users
+SELECT id, name, email, password_hash, role, credit, updated_at, created_at FROM users
 WHERE name = $1 LIMIT 1
 `
 
@@ -153,7 +144,6 @@ func (q *Queries) GetUserByName(ctx context.Context, name string) (User, error) 
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)
@@ -166,10 +156,9 @@ SET
   name = COALESCE($1, name),
   email = COALESCE($2, email),
   password_hash = COALESCE($3, password_hash),
-  credit = COALESCE($4, credit),
-  level = COALESCE($5, level)
-WHERE id = $6
-RETURNING id, name, email, password_hash, role, credit, level, updated_at, created_at
+  credit = COALESCE($4, credit)
+WHERE id = $5
+RETURNING id, name, email, password_hash, role, credit, updated_at, created_at
 `
 
 type UpdateUserParams struct {
@@ -177,7 +166,6 @@ type UpdateUserParams struct {
 	Email        pgtype.Text `json:"email"`
 	PasswordHash pgtype.Text `json:"password_hash"`
 	Credit       pgtype.Int8 `json:"credit"`
-	Level        pgtype.Int4 `json:"level"`
 	ID           uuid.UUID   `json:"id"`
 }
 
@@ -187,7 +175,6 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.Email,
 		arg.PasswordHash,
 		arg.Credit,
-		arg.Level,
 		arg.ID,
 	)
 	var i User
@@ -198,7 +185,6 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.PasswordHash,
 		&i.Role,
 		&i.Credit,
-		&i.Level,
 		&i.UpdatedAt,
 		&i.CreatedAt,
 	)

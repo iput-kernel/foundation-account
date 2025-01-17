@@ -12,7 +12,6 @@ type TxTransferParam struct {
 	FromUser db.User
 	ToUser   db.User
 	Amount   int64
-	Level    int32
 }
 
 type TxTransferResult struct {
@@ -46,7 +45,6 @@ func (store *SQLStore) TxTransfer(ctx context.Context, arg TxTransferParam) (TxT
 			q.AddUserCredit(ctx, db.AddUserCreditParams{
 				ID:     arg.FromUser.ID,
 				Amount: arg.Amount,
-				Level:  arg.Level,
 			})
 
 			q.CreateStatement(ctx, db.CreateStatementParams{
@@ -59,7 +57,6 @@ func (store *SQLStore) TxTransfer(ctx context.Context, arg TxTransferParam) (TxT
 			q.AddUserCredit(ctx, db.AddUserCreditParams{
 				ID:     arg.ToUser.ID,
 				Amount: arg.Amount,
-				Level:  arg.Level,
 			})
 		} else {
 			q.CreateStatement(ctx, db.CreateStatementParams{
@@ -72,7 +69,6 @@ func (store *SQLStore) TxTransfer(ctx context.Context, arg TxTransferParam) (TxT
 			q.AddUserCredit(ctx, db.AddUserCreditParams{
 				ID:     arg.ToUser.ID,
 				Amount: arg.Amount,
-				Level:  arg.Level,
 			})
 
 			q.CreateStatement(ctx, db.CreateStatementParams{
@@ -85,7 +81,6 @@ func (store *SQLStore) TxTransfer(ctx context.Context, arg TxTransferParam) (TxT
 			q.AddUserCredit(ctx, db.AddUserCreditParams{
 				ID:     arg.FromUser.ID,
 				Amount: -arg.Amount,
-				Level:  arg.Level,
 			})
 		}
 		return nil

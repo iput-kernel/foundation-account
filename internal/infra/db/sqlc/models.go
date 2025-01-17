@@ -98,7 +98,6 @@ type User struct {
 	PasswordHash string    `json:"password_hash"`
 	Role         Role      `json:"role"`
 	Credit       int64     `json:"credit"`
-	Level        int32     `json:"level"`
 	UpdatedAt    time.Time `json:"updated_at"`
 	CreatedAt    time.Time `json:"created_at"`
 }
